@@ -36,11 +36,9 @@
 ## <span id ='skill'>技巧类</span>
 <details>
 <summary>1.两数之和</summary>
-<pre>题目：找到数组中两数之和等于target，返回两数的索引
-暴力法遍历，两数的所有组合，复杂度$O(N^2)$;使用哈希表（字典）保存已访问过的数和索引，时间复杂度O(N),空间复杂度O(N).
-
- </pre>
-
+题目：找到数组中两数之和等于target，返回两数的索引
+解法：1暴力法遍历，两数的所有组合，复杂度O(N<sup>2</sup>); 2使用哈希表（字典）保存已访问过的数和索引，时间复杂度O(N),空间复杂度O(N).$n^2$,$x^3+x^9$  
+$x^y$  
 ```
 class Solution:
     def twoSum(self, nums, target):
@@ -50,7 +48,6 @@ class Solution:
                 return[m[target - v], k]
             m[v] = k
 ```
-
 </details>
 
 
