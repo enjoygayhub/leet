@@ -36,17 +36,21 @@
 ## <span id ='skill'>技巧类</span>
 <details>
 <summary>1.两数之和</summary>
-
 <pre>题目：找到数组中两数之和等于target，返回两数的索引
-暴力法遍历，两数的所有组合，复杂度$O(N^2)$;使用哈希表（字典）保存已访问过的数和索引，时间复杂度O(N),空间复杂度O(N)
-```class Solution:
-      def twoSum(self, nums, target):
-          m = {}
-          for k, v in enumerate(nums):
-              if target - v in m.keys():
-                  return[m[target - v], k]
-              m[v] = k```
-            </pre>
+暴力法遍历，两数的所有组合，复杂度$O(N^2)$;使用哈希表（字典）保存已访问过的数和索引，时间复杂度O(N),空间复杂度O(N).
+
+ </pre>
+
+```
+class Solution:
+    def twoSum(self, nums, target):
+        m = {}
+        for k, v in enumerate(nums):
+            if target - v in m.keys():
+                return[m[target - v], k]
+            m[v] = k
+```
+
 </details>
 
 
