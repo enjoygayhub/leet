@@ -89,7 +89,9 @@ class Solution:
 
 ```
 </details>
+
 ### 贪心
+
 <details>
 <summary>12.整数转罗马数字</summary>
 
@@ -109,7 +111,9 @@ class Solution:
                 return ret
 ```
 </details>
+
 ### 回溯
+
 <details>
 <summary>39.组合总数</summary>
 
@@ -219,7 +223,9 @@ class Solution:
 </details>
 ---
 ## <span id="data">经典数据结构</span>
+
 ### 链表
+
 <details>
 <summary>2.两数相加</summary>
 
@@ -303,7 +309,9 @@ class Solution:
         return l1 or l2
 ```
 </details>
+
 ### 栈
+
 <details>
 <summary>20.有效的括号</summary>
 
@@ -341,11 +349,17 @@ class Solution:
         return res.next
 ```
 </details>
+
 ### 树
+
 ### 图
+
 ---
+
 ## <span id ='math'>数学类</span>
+
 ### 位运算
+
 <details>
 <summary>29.两数相除</summary>
 
@@ -372,6 +386,7 @@ class Solution:
 </details>
 <details>
 <summary>50.pow(x,n)</summary>
+	
 题目：实现 pow(x, n) ，即计算 x 的 n 次幂函数。
 解法：分治法，总共要实现n个x相乘。将转化二进制数。比如77 的二进制表示 1001101，对应着77=1+4+8+64.即2<sup>0</sup>,2<sup>2</sup>,2<sup>3</sup>,2<sup>6</sup>.于是有，x<sup>77</sup>=x * x<sup>4</sup> * x<sup>8</sup> * x<sup>64</sup>.时间复杂度logN。
 
@@ -388,7 +403,9 @@ class Solution:
         return y if n >= 0 else 1/y
 ```
 </details>
+
 ### 规律
+
 <details>
 <summary>6.Z字形变换</summary>
 
@@ -475,8 +492,10 @@ class Solution:
                 matrix[i][j] = tmp
 ```
 </details>
+
 ---
 ## <span id ='skill'>技巧类</span>
+
 <details>
 <summary>1.两数之和</summary>
 
@@ -782,7 +801,9 @@ class Solution:
         return ans
 ```
 </details>
+
 ## <span id ='other'>其他</span>
+
 <details>
 <summary>7.整数反转</summary>
 
@@ -803,6 +824,7 @@ class Solution:
 </details>
 <details>
 <summary>9.回文数</summary>
+	
 题目：判断一个整数是否是回文数
 解法：方法1转化为字符串，```return str(num)==str(num)[::-1]```.  
 	方法2，将整数反转，如上第7题  
