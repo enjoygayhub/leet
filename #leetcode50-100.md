@@ -10,8 +10,8 @@
 题目：给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 解法：一动态规划，dp[i]表示以索引i结尾的子数组的最大和，因必须连续，所以dp[i]要么为dp[i-1]+nums[i],要么等于nums[i]自身。状态转移方程dp[i]=max(dp[i-1]+nums[i],nums[i]).可以时间n，空间1
 
-二贪心，实则与方法一区别不大，下面代码中原地操作，遍历过程中如果上一个数大于0变相加。取数组最大值即可，越等于将nums数组当作dp数组。此法已经非常妙了
-
+二贪心，实则与方法一区别不大，下面代码中原地操作，遍历过程中如果上一个数大于0变相加。最后取数组最大值即可，越等于将nums数组当作dp数组。此法已经非常妙了
+三分治法，实现复杂，生成线段树后可以logn的时间实现数组任意长度内的最大子序和求解
 ```python
 class Solution:  # 方法二
     def maxSubArray(self, nums: List[int]) -> int:
@@ -36,7 +36,29 @@ class Solution:  # 方法三
         res=help(0,len(nums)-1)
         return res[2]
 ```
-三分治法，实现复杂，生成线段树后可以logn的时间实现数组任意长度内的最大子序和求解
+leetcode. 918题：给定一个由整数数组 `A` 表示的**环形数组 `C`**，求 `**C**` 的非空子数组的最大可能和。
+解析：53题最大子序和的进阶版。数组为环状。以53题解法为基础
+
+注意2点：<font color='red'>不全为负数的情况下，数组总和—最大子序和=最小子序和。</font>
+
+<font color='red'>环形数组C中最大子序和，要么等于数组A中最大子序，要么包含A的首和尾，此时最大=总和-最小子序和</font>
+```python
+class Solution:
+    def maxSubarraySumCircular(self, A: List[int]) -> int:
+        res = 0
+        maxcur=mincur=0
+        maxsum=minsum=A[0]
+        for x in A:
+            res+=x
+            maxcur = max(maxcur,0)+x
+            maxsum = max(maxsum,maxcur)
+            mincur = min(mincur,0)+x
+            minsum = min(minsum,mincur)
+        if res==minsum:  # 全为负数的情况
+            return maxsum
+        return max(maxsum,res-minsum)
+
+```
 </details>
 <details>
     <summary>54.螺旋矩阵与59.螺旋矩阵2</summary>
