@@ -284,10 +284,10 @@ class Solution:
 ```
 </details>
 <details>
-<summary>21.合并2个有序链表</summary>
+<summary>21.合并2个有序链表，23.合并k个有序链表</summary>
 
 题目：合并2个有序链表
-解法：老经典题了，当年考研还考了合并2个升序数组。
+21解法：老经典题了，当年考研还考了合并2个升序数组。
 ```python
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
@@ -310,6 +310,9 @@ class Solution:
             l1.next = self.mergeTwoLists(l1.next, l2)
         return l1 or l2
 ```
+23解法：1是执行k次21题中的合并，这样由于每次合并，链表的长度会增加n，要执行k次，总的操作n+2n+3n+。。。+kn。复杂度k^2n
+方法2分治两两合并减少一半，递归重复操作。复杂度logk*k*n
+方法3，k个一起合并，把每个的头拿出来建个小顶堆，拿出最小的数，添加这个结点的后续入堆，复杂度同方法二，实现起来复杂多了
 </details>
 
 ### 栈
