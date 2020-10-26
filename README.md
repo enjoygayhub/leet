@@ -1,4 +1,4 @@
-# leet code 1-50
+# leet code
 
 欢迎阅读
 
@@ -89,9 +89,7 @@ class Solution:
 
 ```
 </details>
-
 ### 贪心
-
 <details>
 <summary>12.整数转罗马数字</summary>
 
@@ -111,14 +109,12 @@ class Solution:
                 return ret
 ```
 </details>
-
 ### 回溯
-
 <details>
 <summary>39.组合总数</summary>
-
 题目：给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。数组中无重复的数，且每个数使用次数不限。
 解法：回溯加剪枝，将数组candidates先排序，依次选择数来与target相减，更新下一层被选数组中的所有数都大于等于上一层被选的数，来达到剪枝效果。特别的，python中path参数更新，变相完成了回溯的效果。
+
 ```python
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -221,18 +217,14 @@ class Solution:
         return res
 ```
 </details>
-
 ---
-
 ## <span id="data">经典数据结构</span>
-
 ### 链表
-
 <details>
 <summary>2.两数相加</summary>
-
 题目：两数逆序链表表示，求和的逆序链表表示
-解法：按链表逐位相加，大于10则取个位，后面的和需+1。特别的，循环结束并不是2个指向链表的指针都为空时，还有进位。这题没啥意思，就是整数加法，正常朝左进位，逆序就朝右。
+解法：按链表逐位相加，大于10则取个位，后面的和需+1。特别的，循环结束并不是2个指向链表的指针都为空时，还有进位。这题没啥意思，就是整数加法，正常的朝左进位，逆序就朝右。
+
 ```python
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
@@ -284,10 +276,10 @@ class Solution:
 ```
 </details>
 <details>
-<summary>21.合并2个有序链表，23.合并k个有序链表</summary>
+<summary>21.合并2个有序链表</summary>
 
 题目：合并2个有序链表
-21解法：老经典题了，当年考研还考了合并2个升序数组。
+解法：老经典题了，当年考研还考了合并2个升序数组。
 ```python
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
@@ -310,13 +302,8 @@ class Solution:
             l1.next = self.mergeTwoLists(l1.next, l2)
         return l1 or l2
 ```
-23解法：1是执行k次21题中的合并，这样由于每次合并，链表的长度会增加n，要执行k次，总的操作n+2n+3n+。。。+kn。复杂度k^2n
-方法2分治两两合并减少一半，递归重复操作。复杂度logk*k*n
-方法3，k个一起合并，把每个的头拿出来建个小顶堆，拿出最小的数，添加这个结点的后续入堆，复杂度同方法二，实现起来复杂多了
 </details>
-
 ### 栈
-
 <details>
 <summary>20.有效的括号</summary>
 
@@ -335,9 +322,9 @@ class Solution:
 </details>
 <details>
 <summary>23.两两交换链表中的节点</summary>
-
-题目：第1个与第二交换，第三换第4，一次类推
+题目：第1个与第二交换，第三换第4，依此类推
 解法：把2个要交换的节点找到，断开，链接一顿操作，。
+
 ```python
 class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
@@ -354,17 +341,11 @@ class Solution:
         return res.next
 ```
 </details>
-
 ### 树
-
 ### 图
-
 ---
-
 ## <span id ='math'>数学类</span>
-
 ### 位运算
-
 <details>
 <summary>29.两数相除</summary>
 
@@ -391,7 +372,6 @@ class Solution:
 </details>
 <details>
 <summary>50.pow(x,n)</summary>
-	
 题目：实现 pow(x, n) ，即计算 x 的 n 次幂函数。
 解法：分治法，总共要实现n个x相乘。将转化二进制数。比如77 的二进制表示 1001101，对应着77=1+4+8+64.即2<sup>0</sup>,2<sup>2</sup>,2<sup>3</sup>,2<sup>6</sup>.于是有，x<sup>77</sup>=x * x<sup>4</sup> * x<sup>8</sup> * x<sup>64</sup>.时间复杂度logN。
 
@@ -408,9 +388,7 @@ class Solution:
         return y if n >= 0 else 1/y
 ```
 </details>
-
 ### 规律
-
 <details>
 <summary>6.Z字形变换</summary>
 
@@ -497,10 +475,8 @@ class Solution:
                 matrix[i][j] = tmp
 ```
 </details>
-
 ---
 ## <span id ='skill'>技巧类</span>
-
 <details>
 <summary>1.两数之和</summary>
 
@@ -517,10 +493,10 @@ class Solution:
 ```
 </details>
 <details>
-<summary>16.三数之和</summary>
-
+<summary>15.三数之和</summary>
 题目：找到数组中三数之和等于0，返回三数
 解法：本题是两数之和进阶版，暴力发超时.其实这题也是双指针题，但是速度太慢。转为两数和，x2+x3 = target= -x1.需考虑特殊情况0，和重复数字。18题四数和不做了，
+
 ```python
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
@@ -547,10 +523,10 @@ class Solution:
 </details>
 <details>
 <summary>3.无重复字符的最长字串</summary>
-
-题目：找到字符串中无重复字符的最长字串
+题目：找到字符串中无重复字符的最长子串
 解法：此题经典滑动窗口问题。  
-解法一，使用字典记录出现位置，出现相同字符时，i-start为一个合法的字串长度。注意相同字符上次出现的索引一定要不小于起始索引。
+解法一，使用字典记录出现位置，出现相同字符时，i-start为一个合法的子串长度。注意相同字符上次出现的索引一定要不小于起始索引。
+
 ```python
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -806,9 +782,7 @@ class Solution:
         return ans
 ```
 </details>
-
 ## <span id ='other'>其他</span>
-
 <details>
 <summary>7.整数反转</summary>
 
@@ -829,7 +803,6 @@ class Solution:
 </details>
 <details>
 <summary>9.回文数</summary>
-	
 题目：判断一个整数是否是回文数
 解法：方法1转化为字符串，```return str(num)==str(num)[::-1]```.  
 	方法2，将整数反转，如上第7题  
@@ -888,9 +861,9 @@ class Solution:
 </details>
 <details>
 <summary>31.下一个排列</summary>
-
 题目：实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）
-解法：从后向前找到i索引的值大于i-1，然后再从后向前找到第一个k索引的值大于i-1，交换i-1和k。最后将i之后的数都反转。
+解法：从后向前找到i索引的值大于i-1，然后再从后向前找到第一个k索引的值大于i-1，交换i-1和k。最后将i-1之后的数都递增。
+
 ```python
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
@@ -937,4 +910,5 @@ class Solution:
         return True
 ```
 </details>
+
 
