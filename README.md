@@ -3,22 +3,27 @@
 欢迎阅读
 
 ## 目录
+
 1. [经典算法类](#classic)  
-	动态规划、贪心、回溯
+   动态规划、贪心、回溯
 2. [经典数据结构](#data)  
-	链表、栈、树、图
+   链表、栈、树、图
 3. [数学](#math)  
-	位运算、找规律
+   位运算、找规律
 4. [特别技巧](#skill)  
-	花式技巧
+   花式技巧
 5. [其他](#other)    
    运算符优先级:~取反>算术运算符>移位>关系>按位与>逻辑与>条件运算>赋值
+
 ---
+
 ## <span id ='classic'>经典算法</span>
 
 ### DP动态规划
+
 <details>
 <summary>5.最长回文子串</summary>
+
 
 题目：返回字符串中最长回文子串
 解法一：动态规划。```dp[i][j]=1```表示i到j之间为回文。```dp[i,i]=1,dp[i][i+1]=(str[i]==str[i+1])```既自身单个算回文，自身与下一个相同算回文。状态转移方程```dp[i][j]=(dp[i-1][j+1] and str[i]==str[j])```。时间复杂度n^2,太慢了
@@ -44,6 +49,7 @@ class Solution:
                     ans = s[i:j+1]
         return ans
 ```
+
 解法二：简接滑动窗口。运用切片和反向,分别对奇数偶数长度的子串判断。时间复杂度n(据说).
 
 ```python
@@ -62,6 +68,7 @@ class Solution:
         return s[start:start+maxLen]
 
 ```
+
 解法三：中心扩展。先向后纳入相同元素,再分别2端扩张。时间复杂度n(不是).
 
 ```python
@@ -88,13 +95,18 @@ class Solution:
         return s[left:right+1]
 
 ```
+
 </details>
+
 ### 贪心
+
 <details>
 <summary>12.整数转罗马数字</summary>
 
+
 题目：罗马数字包含以下七种字符： I， V， X， L，C，D 和 M，给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内
 解法：按照1000，900，500，400，100，90，50，40，10，9，5，4，1。贪婪匹配，这个数字元素设计非常合理，确保了贪心的解一定是正确 的。
+
 ```python
 class Solution:
     def intToRoman(self, num: int) -> str:
@@ -108,10 +120,15 @@ class Solution:
             if num == 0:
                 return ret
 ```
+
 </details>
+
 ### 回溯
+
 <details>
 <summary>39.组合总数</summary>
+
+
 题目：给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。数组中无重复的数，且每个数使用次数不限。
 解法：回溯加剪枝，将数组candidates先排序，依次选择数来与target相减，更新下一层被选数组中的所有数都大于等于上一层被选的数，来达到剪枝效果。特别的，python中path参数更新，变相完成了回溯的效果。
 
@@ -131,12 +148,16 @@ class Solution:
         backtracking(candidates, target, [])
         return solutions
 ```
+
 </details>
+
 <details>
 <summary>46.全排列，47全排列有重复</summary>
 
+
 题目：46给定一个 没有重复 数字的序列，返回其所有可能的全排列。
 解法：回溯经典。复杂度n*N！
+
 ```python
 class Solution:
     def permute(self, nums):
@@ -151,8 +172,10 @@ class Solution:
         backtrack(0, len(nums))
         return ans  
 ```
+
 题目：47，给定一个有重复 数字的序列，返回其无重复的所有可能的全排列。
 解法1：复杂度n*N！。因为存在重复元素，使用回溯时，要使用同一层不固定已出现过的数。
+
 ```python
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res=[]
@@ -171,7 +194,9 @@ class Solution:
         backtrace(0,len(nums))
         return res
 ```
+
 解法2：不回溯，使用递归。必须得先排序。循环中，如果后面的数大于当前层要固定的位的数（对应代码中的索引i），则与之交换，注意此过程中i的值应该是一直增大的，因为之前递增排序，交换后索引i之后的数仍然有序，同时巧妙的避免了固定i位的数的重复。
+
 ```python
     def permuteUnique(self, nums):
         nums.sort()
@@ -190,12 +215,16 @@ class Solution:
             nums[i], nums[k] = nums[k], nums[i]
             self._permuteunique(nums.copy(), i + 1, result)
 ```
+
 </details>
+
 <details>
 <summary>40.组合总数2</summary>
 
+
 题目：给定一个全正整数元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。数组中有重复的数，且每个数只使用1次，且输出结果无重复。
 解法：回溯加剪枝，同上，关键在于剪去同一层的相同元素的。同一层不选重复的数字
+
 ```python
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -216,14 +245,20 @@ class Solution:
         helper(0 ,target,[])
         return res
 ```
+
 </details>
 ---
+
 ## <span id="data">经典数据结构</span>
+
 ### 链表
+
 <details>
 <summary>2.两数相加</summary>
+
+
 题目：两数逆序链表表示，求和的逆序链表表示
-解法：按链表逐位相加，大于10则取个位，后面的和需+1。特别的，循环结束并不是2个指向链表的指针都为空时，还有进位。这题没啥意思，就是整数加法，正常的朝左进位，逆序就朝右。
+解法：按链表逐位相加，大于10则取个位，后面的和需+1。特别的，循环结束并不是2个指向链表的指针都为空时，还有进位。这题没啥意思，就是整数加法，正常朝左进位，逆序就朝右。
 
 ```python
 class Solution:
@@ -239,12 +274,16 @@ class Solution:
             l2 = l2.next if l2 else None
         return dummy.next
 ```
+
 </details>
+
 <details>
 <summary>19.删除链表的倒数第N个节点</summary>
 
+
 题目：删除链表的倒数第N个节点
 解法1：经典快慢双指针。
+
 ```python
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
@@ -260,7 +299,9 @@ class Solution:
         pre.next = pre.next.next  # 删除这个节点
         return dum.next
 ```
+
 解法2：递归骚操作。
+
 ```python
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
@@ -274,12 +315,16 @@ class Solution:
         index(head)
         return head.next
 ```
+
 </details>
+
 <details>
 <summary>21.合并2个有序链表</summary>
 
+
 题目：合并2个有序链表
 解法：老经典题了，当年考研还考了合并2个升序数组。
+
 ```python
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
@@ -302,13 +347,18 @@ class Solution:
             l1.next = self.mergeTwoLists(l1.next, l2)
         return l1 or l2
 ```
+
 </details>
+
 ### 栈
+
 <details>
 <summary>20.有效的括号</summary>
 
+
 题目：给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
 解法：用栈.先放一个元素进去，谨防空栈出操作
+
 ```python
 class Solution:
     def isValid(self, s: str) -> bool:
@@ -319,10 +369,14 @@ class Solution:
             elif dic[stack.pop()] != c: return False 
         return len(stack) == 1
 ```
+
 </details>
+
 <details>
 <summary>23.两两交换链表中的节点</summary>
-题目：第1个与第二交换，第三换第4，依此类推
+
+
+题目：第1个与第二交换，第三换第4，一次类推
 解法：把2个要交换的节点找到，断开，链接一顿操作，。
 
 ```python
@@ -340,17 +394,127 @@ class Solution:
             p=p.next
         return res.next
 ```
+
 </details>
+
 ### 树
+
+<details>
+<summary>144.二茶树先序遍历</summary>
+
+
+题目：先序遍历，迭代方法
+解法：有2种迭代方法，第一种用栈来模拟先序遍历过程，只要每次先将右结点加入栈中，再将左节点放入，那么左节点下次肯定先出来。
+
+```python
+class Solution:  # 方法一
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack=[root]
+        r=[]
+        while stack:
+            node = stack.pop()
+            r.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return r
+```
+
+```javascript
+var preorderTraversal = function(root) { //方法二
+     var stack=[];
+     var res=[];
+     if(!root) return res;
+     while (root!==null || stack.length>0){
+         while (root){
+             res.push(root.val);
+             stack.push(root);
+             root=root.left;
+         }
+         root=stack.pop();
+         root=root.right;
+     }
+    return res;
+};
+```
+
+</details>
+
+<details>
+<summary>94.二叉树中序遍历</summary>
+
+
+题目：给定一个二叉树，返回它的中序 遍历。
+解法：迭代，左链连续入栈，弹出后访问，
+
+```python
+class Solution:
+    def inorderTraversal(self, root):
+        res, stack = [], []
+        while True:
+            while root:
+                stack.append(root)
+                root = root.left
+            if not stack:
+                return res
+            node = stack.pop()
+            res.append(node.val)
+            root = node.right
+```
+
+</details>
+
+<details>
+<summary>145.二叉树后序遍历</summary>
+
+
+题目：给定一个二叉树，返回它的后序 遍历。
+解法：迭代，需设置pre结点，
+
+```python
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return list()
+            
+        res = list()
+        stack = list()
+        prev = None
+        while root or stack:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            if not root.right or root.right == prev:  # 如果没有右结点，右结点访问过了
+                res.append(root.val)
+                prev = root   # 每次访问完后设为pre
+                root = None   # 需置空，等待下一个出栈
+            else:
+                stack.append(root)  # 有右结点则当前结点再次进栈
+                root = root.right	
+        return res
+```
+
+</details>
+
 ### 图
+
 ---
+
 ## <span id ='math'>数学类</span>
+
 ### 位运算
+
 <details>
 <summary>29.两数相除</summary>
 
+
 题目：两数相除不能用乘除法。可以挨个减法，但太慢，所以每次翻倍减
 解法：可以挨个减法，但太慢，所以每次翻倍减。另负数越界问题，将被除数都弄成负数来解决
+
 ```python
 class Solution:
     def divide(self, dividend: int, divisor: int) -> int:
@@ -369,9 +533,13 @@ class Solution:
             a+=temp>>1
         return -res if (dividend>0) ^ (divisor>0) else res
 ```
+
 </details>
+
 <details>
 <summary>50.pow(x,n)</summary>
+
+
 题目：实现 pow(x, n) ，即计算 x 的 n 次幂函数。
 解法：分治法，总共要实现n个x相乘。将转化二进制数。比如77 的二进制表示 1001101，对应着77=1+4+8+64.即2<sup>0</sup>,2<sup>2</sup>,2<sup>3</sup>,2<sup>6</sup>.于是有，x<sup>77</sup>=x * x<sup>4</sup> * x<sup>8</sup> * x<sup>64</sup>.时间复杂度logN。
 
@@ -387,13 +555,18 @@ class Solution:
             m >>= 1
         return y if n >= 0 else 1/y
 ```
+
 </details>
+
 ### 规律
+
 <details>
 <summary>6.Z字形变换</summary>
 
+
 题目：将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。
 解法一：找规律,字符串按索引又第一行排到第n行,再反向排到第1行,设置转向flag.
+
 ```python
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
@@ -406,7 +579,9 @@ class Solution:
             i += flag
         return "".join(res)
 ```
+
 解法二：找规律,寻找排列周期,T=2*numRows-2
+
 ```python
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
@@ -421,9 +596,12 @@ class Solution:
                 res[turn-a]+=s[i]       
         return ''.join(res)
 ```
+
 </details>
+
 <details>
 <summary>38.外观数列</summary>
+
 
 题目：「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。前五项如下：
 
@@ -432,7 +610,8 @@ class Solution:
 3.     21
 4.     1211
 5.     111221
-解法：找生成新的字符串的规律，可以用双指针，也可以计数迭代
+       解法：找生成新的字符串的规律，可以用双指针，也可以计数迭代
+
 ```python
 class Solution:
     def countAndSay(self, n):
@@ -451,12 +630,16 @@ class Solution:
             layer = newlayer
         return layer
 ```
+
 </details>
+
 <details>
 <summary>48.旋转图像</summary>
 
+
 题目：给定一个 n × n 的二维矩阵表示一个图像。将图像顺时针旋转 90 度。需原地操作
 解法：1.先上下反转，再转置。(最舒服）2.先转置，再水平翻转。3.找出规律，索引[i][j]将移动到索引[j][n-i-1].  复杂度n^2
+
 ```python
 class Solution:
     def rotate(self, A: List[List[int]]) -> None:  # 解法1
@@ -474,14 +657,19 @@ class Solution:
                 matrix[j][n - 1 - i] = matrix[i][j]
                 matrix[i][j] = tmp
 ```
+
 </details>
 ---
+
 ## <span id ='skill'>技巧类</span>
+
 <details>
 <summary>1.两数之和</summary>
 
+
 题目：找到数组中两数之和等于target，返回两数的索引
 解法：1暴力法遍历，两数的所有组合，复杂度O(N<sup>2</sup>); 2使用哈希表（字典）保存已访问过的数和索引，时间复杂度O(N),空间复杂度O(N).
+
 ```python
 class Solution:
     def twoSum(self, nums, target):
@@ -491,9 +679,13 @@ class Solution:
                 return[m[target - v], k]
             m[v] = k
 ```
+
 </details>
+
 <details>
-<summary>15.三数之和</summary>
+<summary>16.三数之和</summary>
+
+
 题目：找到数组中三数之和等于0，返回三数
 解法：本题是两数之和进阶版，暴力发超时.其实这题也是双指针题，但是速度太慢。转为两数和，x2+x3 = target= -x1.需考虑特殊情况0，和重复数字。18题四数和不做了，
 
@@ -520,12 +712,16 @@ class Solution:
                         res.append([x, y, z])
         return res
 ```
+
 </details>
+
 <details>
 <summary>3.无重复字符的最长字串</summary>
-题目：找到字符串中无重复字符的最长子串
+
+
+题目：找到字符串中无重复字符的最长字串
 解法：此题经典滑动窗口问题。  
-解法一，使用字典记录出现位置，出现相同字符时，i-start为一个合法的子串长度。注意相同字符上次出现的索引一定要不小于起始索引。
+解法一，使用字典记录出现位置，出现相同字符时，i-start为一个合法的字串长度。注意相同字符上次出现的索引一定要不小于起始索引。
 
 ```python
 class Solution:
@@ -539,7 +735,9 @@ class Solution:
         res = max(res, len(s)-start)
         return res
 ```
+
 	解法二，使用双端队列deque，模拟滑动窗口，当遇到相同字符时，队列左侧排除元素，直到排出到该字符停，该方法非常直观，好理解，速度较解法一慢点。
+
 ```python
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -556,12 +754,16 @@ class Solution:
         res = max(res,len(queue))
         return res
 ```
+
 </details>
+
 <details>
 <summary>11.盛最多水的容器</summary>
 
+
 题目：输入数组 [1,8,6,2,5,4,8,3,7]。数字代表挡板高度，容器能够容纳水的最大值为 49。
 解法：1经典双指针题，双指针首尾开始向中间移动，保证不会错过最大面积，每次移动的指针为数值较小的那一个
+
 ```python
 class Solution:
     def maxArea(self, height: List[int]) -> int:
@@ -575,12 +777,16 @@ class Solution:
                 j -= 1
         return water
 ```
+
 </details>
+
 <details>
 <summary>13.最长公共前缀</summary>
 
+
 题目：编写一个函数来查找字符串数组中的最长公共前缀。不存在公共前缀，返回 ""。
 解法：1按规则循环比较，依次按索引i比较每个串的第i位是否相同。
+
 ```python
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
@@ -593,7 +799,9 @@ class Solution:
             cmn+=c
         return cmn
 ```
+
 解法2：骚操作，运用zip*。
+
 ```python
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
@@ -605,9 +813,12 @@ class Solution:
                 break
         return out_str
 ```
+
 </details>
+
 <details>
 <summary>49.字母异位词分组</summary>
+
 
 题目：给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
 解法：利用质数相乘唯一性，可以将相同字母不同顺序的字符串映射到唯一的一个整数值。
@@ -616,6 +827,7 @@ class Solution:
 不要问为啥，我也不知道。
 而且我测试过，映射为ord(c)+3，ord(c)+4，ord(c)+1，ord(c)+0都不行，会出现乘积重复val值
 但是ord(c)+2就是可以。
+
 ```python
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
@@ -630,27 +842,34 @@ class Solution:
                 mp[val] = [word]
         return list(mp.values())
 ```
+
 </details>
+
 <details>
 <summary>17.电话号码的字母组合</summary>
 
+
 题目：给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
 解法：其实就是拼音9建，按数字能打出的所有字母可能性.组合问题，递归，回溯都可以。下面代码骚操作，使用itertools.product(*)
+
 ```python
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
         b = {"2":"abc", "3":"def", "4":"ghi", "5":"jkl", "6":"mno", "7":"pqrs", "8":"tuv", "9":"wxyz"}
         return [] if digits == "" else [ "".join(x) for x in itertools.product(*(b[d] for d in digits ))]
 ```
-</details>
-<details>
-<summary>17.搜素旋转排序数组</summary>
 
+</details>
+
+<details>
+<summary>18.搜素旋转排序数组</summary>
 题目：假设按照升序排序的数组在预先未知的某个点上进行了旋转。数组无重复
 ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
 搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
 
+
 解法：二分法，分四种情况。要用索引0当指标，因为数据可能一直递增。注意第一个判断里面等号不可少。
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -669,14 +888,18 @@ class Solution:
                 return M
         return -1
 ```
+
 </details>
+
 <details>
 <summary>81.搜素旋转排序数组2，有重复</summary>
+
 
 题目：假设按照升序排序的数组在预先未知的某个点上进行了旋转。
 ( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
 搜索一个给定的目标值，如果数组中存在这个目标值，则返回TRUE，否则返回 false 。
 解法：二分法，17题的进阶。主要问题在于mid等于L时，不知道target在左还是右边。与17题相比较，增加mid等于L时，L+=1.同时判断在左右有序序列里时用的时nums[L]
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -698,12 +921,16 @@ class Solution:
                 H = M
         return False
 ```
+
 </details>
+
 <details>
 <summary>34. 在排序数组中查找元素的第一个和最后一个位置</summary>
 
+
 题目：给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
 解法：还是二分法，还是分二次，找到mid == target之后，在用二分找第一和最后出现的位置
+
 ```python
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
@@ -732,12 +959,16 @@ class Solution:
                 break
         return (first,last)
 ```
+
 </details>
+
 <details>
 <summary>7.搜索插入的位置</summary>
 
+
 题目：给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。数组中无重复元素。
 解法：二分法
+
 ```python
 class Solution:
     def searchInsert(self, nums: List[int], target: int) -> int:
@@ -752,14 +983,18 @@ class Solution:
   # 调库函数
 return bisect.bisect_left(nums,target)
 ```
+
 </details>
+
 <details>
 <summary>43.字符串相乘</summary>
+
 
 题目：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
 解法：此题其实没啥意思。不让把整个数转化为整数来计算，可以把单个字符转化为数字，为了出题而出题。1个想法是把num2中每一个数与num1相乘再求和，此过程会增加很多补位的0的加法运算。复杂度mn+n^2.mn为乘法次数，n^2为加法次数。  
 第2个想法是用列表记录，两数长度分别为m，n。则两数乘积长度最大为m+n，至少为m+n-1.
 num1中的第i个数和num2中第j个数相乘，所得结果对最后的结果中第i+j+1有累计。复杂度mn（不知道怎么算的？）不过确实减少了数字很大的数相加。
+
 ```python
 class Solution:
     def multiply(self, num1: str, num2: str) -> str:
@@ -781,13 +1016,18 @@ class Solution:
         ans = "".join(str(x) for x in ansArr[index:])
         return ans
 ```
+
 </details>
+
 ## <span id ='other'>其他</span>
+
 <details>
 <summary>7.整数反转</summary>
 
+
 题目：给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
 解法：没什么好说 的.注意负数和整数越界,32 位的有符号整数其数值范围为 [−2^31,  2^31 − 1]
+
 ```python
 class Solution:
     def reverse(self, x: int) -> int:
@@ -800,13 +1040,16 @@ class Solution:
             x //= 10
         return res * sign if res < 2 ** 31 else 0
 ```
+
 </details>
+
 <details>
 <summary>9.回文数</summary>
 题目：判断一个整数是否是回文数
 解法：方法1转化为字符串，```return str(num)==str(num)[::-1]```.  
 	方法2，将整数反转，如上第7题  
 	方法3，将整数反转一半。（方法4，循环将整数的首位与末位比较）
+
 
 ```python
 class Solution:
@@ -819,12 +1062,16 @@ class Solution:
             x//=10
         return x == reversed or x==reversed//10
 ```
+
 </details>
+
 <details>
 <summary>13.罗马数字转整数</summary>
 
+
 题目：字符串表示罗马字符，返回整数
 解法：首先建立一个HashMap来映射符号和值，然后对字符串从左到右来，如果当前字符代表的值不小于其右边，就加上该值；否则就减去该值。以此类推到最左边的数，最终得到的结果即是答案。也可以反过迭代，比如下面
+
 ```python
 class Solution:
     def romanToInt(self, s: str) -> int:
@@ -837,12 +1084,16 @@ class Solution:
                 total+=dict[s[-i]]
         return total
 ```
+
 </details>
+
 <details>
 <summary>22.括号生成</summary>
 
+
 题目：数字 n 代表生成括号的对数，生成所有可能的并且 有效的 括号组合
 解法：DFS
+
 ```python
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
@@ -858,11 +1109,15 @@ class Solution:
         rec(0,0,"")
         return valid
 ```
+
 </details>
+
 <details>
 <summary>31.下一个排列</summary>
+
+
 题目：实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）
-解法：从后向前找到i索引的值大于i-1，然后再从后向前找到第一个k索引的值大于i-1，交换i-1和k。最后将i-1之后的数都递增。
+解法：从后向前找到i索引的值大于i-1，然后再从后向前找到第一个k索引的值大于i-1，交换i-1和k。最后将i之后的数都反转。
 
 ```python
 class Solution:
@@ -879,9 +1134,12 @@ class Solution:
         else:
             nums.reverse()
 ```
+
 </details>
+
 <details>
 <summary>36.有效的数独</summary>
+
 
 题目：判断一个 9x9 的数独是否有效。只需要根据以下规则，验证已经填入的数字是否有效即可。
 数字 1-9 在每一行只能出现一次。
@@ -889,6 +1147,7 @@ class Solution:
 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
 
 解法：每行每列每个3X3盒子都设一个数组，数组的index+1对应数字index+1在该行（列）的出现次数（初始为0，出现一次加1，大于1时return false）。
+
 ```python
 class Solution:
     def isValidSudoku(self, board):
@@ -909,6 +1168,35 @@ class Solution:
                         return False
         return True
 ```
+
 </details>
 
+<details>
+<summary>26.删除排序数组中重复的项，80.删除重复的2</summary>
+
+
+题目：25返回新的长度，不能重复，80 可以重复1次，意思最多2个一样的。
+
+解法：j指针从1开始遍历，i指针计数无重复的数
+
+```python
+class Solution:
+    def removeDuplicates(self, nums):
+        i=0
+        for n in nums:
+            if i<1 or n != nums[i-1]:
+                nums[i]=n
+                i+=1       
+        return i
+class Solution:  # 80题
+    def removeDuplicates(self, nums: List[int]) -> int:
+        i = 0
+        for n in nums:
+            if i < 2 or n > nums[i-2]:
+                nums[i] = n
+                i += 1
+        return i                             
+```
+
+</details>
 
