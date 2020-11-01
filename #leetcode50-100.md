@@ -10,8 +10,8 @@
 题目：给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 解法：一动态规划，dp[i]表示以索引i结尾的子数组的最大和，因必须连续，所以dp[i]要么为dp[i-1]+nums[i],要么等于nums[i]自身。状态转移方程dp[i]=max(dp[i-1]+nums[i],nums[i]).可以时间n，空间1
 
-二贪心，实则与方法一区别不大，下面代码中原地操作，遍历过程中如果上一个数大于0变相加。最后取数组最大值即可，越等于将nums数组当作dp数组。此法已经非常妙了
-三分治法，实现复杂，生成线段树后可以logn的时间实现数组任意长度内的最大子序和求解
+二贪心，实则与方法一区别不大，下面代码中原地操作，遍历过程中如果上一个数大于0变相加。取数组最大值即可，越等于将nums数组当作dp数组。此法已经非常妙了
+
 ```python
 class Solution:  # 方法二
     def maxSubArray(self, nums: List[int]) -> int:
@@ -36,29 +36,7 @@ class Solution:  # 方法三
         res=help(0,len(nums)-1)
         return res[2]
 ```
-leetcode. 918题：给定一个由整数数组 `A` 表示的**环形数组 `C`**，求 `**C**` 的非空子数组的最大可能和。
-解析：53题最大子序和的进阶版。数组为环状。以53题解法为基础
-
-注意2点：<font color='red'>不全为负数的情况下，数组总和—最大子序和=最小子序和。</font>
-
-<font color='red'>环形数组C中最大子序和，要么等于数组A中最大子序，要么包含A的首和尾，此时最大=总和-最小子序和</font>
-```python
-class Solution:
-    def maxSubarraySumCircular(self, A: List[int]) -> int:
-        res = 0
-        maxcur=mincur=0
-        maxsum=minsum=A[0]
-        for x in A:
-            res+=x
-            maxcur = max(maxcur,0)+x
-            maxsum = max(maxsum,maxcur)
-            mincur = min(mincur,0)+x
-            minsum = min(minsum,mincur)
-        if res==minsum:  # 全为负数的情况
-            return maxsum
-        return max(maxsum,res-minsum)
-
-```
+三分治法，实现复杂，生成线段树后可以logn的时间实现数组任意长度内的最大子序和求解
 </details>
 <details>
     <summary>54.螺旋矩阵与59.螺旋矩阵2</summary>
@@ -128,8 +106,7 @@ class Solution:    # 方法二
 </details>
 
 <details>
-    <summary>54.螺旋矩阵与59.螺旋矩阵2</summary>
-
+    <summary>55.跳跃游戏</summary>
 题目：给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。
 解：方法1，从前面开始跳。设置ma为最大可达到索引位置。遍历数组，每次更新最远位置，如果出现索引i大于ma，返回False。
 
@@ -247,11 +224,15 @@ class Solution:
 </details>
 <details>
     <summary>62.不同路径。63.不同路径2。64最小路径和</summary>
-
 题目：62,一个机器人位于一个 m x n 网格的左上角 。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角。问总共有多少条不同的路径？。
-解：方法一，经典动态规划，状态转移方程dp[i][j] = dp[i-1][j]+dp[i][j-1]。时间空间复杂度：O(N^2)
+解：方法一，经典动态规划，状态转移方程
+$$
+dp[i][j] = dp[i-1][j]+dp[i][j-1]
+$$
+。时间空间复杂度：O(N^2)
 方法一可以优化到空间复杂度On。
 方法二，求数学组合， return int(comb(m+n-2,n-1))，向下走m-1步，向右走n-1步。求个组合
+
 ```python
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
@@ -281,7 +262,12 @@ class Solution:
         return dp[-2]  
 ```
 题目：64，给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。。
-解法：与62类似，动态规划，状态转移方程改变一下：dp[i][j] = (dp[i-1][j],dp[i][j-1])+grid[i][j].既到达一个位置得最小距离等于他上面的位置与左边位置中选一个较小的路径，再加上自身。特殊考虑第一行和第一列即可。
+解法：与62类似，动态规划，状态转移方程改变一下：
+$$
+dp[i][j] = (dp[i-1][j],dp[i][j-1])+grid[i][j]
+$$
+.既到达一个位置得最小距离等于他上面的位置与左边位置中选一个较小的路径，再加上自身。特殊考虑第一行和第一列即可。
+
 ```python
 class Solution:
     def minPathSum(self, grid: List[List[int]]) -> int:
@@ -301,7 +287,6 @@ class Solution:
 </details>
 <details>
     <summary>66.加1</summary>
-
 题目：给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
 你可以假设除了整数 0 之外，这个整数不会以零开头。
@@ -338,4 +323,718 @@ class Solution:
         return bin(x)[2:]       
 ```
 </details>
-## 还没做完
+<details>
+    <summary>69.x的平方根</summary>
+
+题目：实现 int sqrt(int x) 函数。
+计算并返回 x 的平方根，其中 x 是非负整数。
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+
+解：1，二分法，下届设为0，上届x本身，比较mid*mid与x
+	2，[牛顿迭代法](https://baike.baidu.com/item/%E7%89%9B%E9%A1%BF%E8%BF%AD%E4%BB%A3%E6%B3%95)。将题目变成求y=r*r-x，求y=0时的r值。迭代  new r = r-y(r)/y'(r) 
+```python
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        r = x
+        while r*r > x:
+            r = (r + x//r)//2
+        return r      
+```
+</details>
+<details>
+    <summary>70.爬楼梯</summary>
+
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+解：经典斐波那契数列，不会真的有人用递归去做吧
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n < 3:
+            return n
+        a, b = 1, 1
+        for i in range(2, n + 1):
+            a, b = b, a + b
+        return b  
+```
+</details>
+<details>
+    <summary>71.简化路径</summary>
+
+以 Unix 风格给出一个文件的绝对路径，你需要简化它。或者换句话说，将其转换为规范路径。
+一个.表示当前本身，两个点..表示目录切换到上一级。
+解：这题/符号只分割，不表示任何含义 ，且多个/当一个，另外多个.没有含义。用栈保存路径即可
+遇到..就出栈。需先按/分割原来的字符串。
+```python
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        stack = []
+        for p in path.split("/"):
+            if p == "..":
+                if stack:
+                    stack.pop()
+            elif p and p != '.':
+                stack.append(p)
+        return '/' + '/'.join(stack)
+```
+</details>
+<details>
+<summary>72.编辑距离</summary>
+
+题目：给两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
+解法：动态规划。首先是dp[i][j]表示的word1中前i个字符与word2中前j个字符的编辑距离。
+```python
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        r=len(word1)+1
+        c = len(word2)+1
+        dp = [[0]*c for _ in range(r)]
+        for i in range(r):
+            dp[i][0]=i
+        for j in range(c):
+            dp[0][j] = j
+        for i in range(1,r):
+            for j in range(1,c):
+                if word1[i-1]==word2[j-1]:
+                    dp[i][j]=dp[i-1][j-1]
+                else:
+                    dp[i][j]= 1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])
+
+        return dp[-1][-1]
+```
+</details>
+<details>
+    <summary>73.矩阵置0</summary>
+
+给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。使用原地算法。
+解：原地操作，需要标记哪些行列要置为0，不能遇到一个0，就直接将所在行列都置为0。
+
+```python
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        # First row has zero?
+        m, n, firstRowHasZero = len(matrix), len(matrix[0]), not all(matrix[0])
+        # Use first row/column as marker, scan the matrix
+        for i in range(1, m):
+            for j in range(n):
+                if matrix[i][j] == 0:
+                    matrix[0][j] = matrix[i][0] = 0
+        # Set the zeros
+        for i in range(1, m):
+            for j in range(n - 1, -1, -1):  # ！！！关键点，这里必须倒过来遍历
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+        # Set the zeros for the first row
+        if firstRowHasZero:
+            matrix[0] = [0] * n
+```
+</details>
+<details>
+    <summary>74.搜索二维矩阵</summary>
+
+编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+每行中的整数从左到右按升序排列。
+每行的第一个整数大于前一行的最后一个整数。
+
+解：由于矩阵存在的特殊性质，每行每列都是升序，且没有每行重叠。既可以先二分搜索确定所在行，然后再行内查找
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        return bool(matrix) and target in matrix[bisect.bisect(matrix, [target + 0.5]) - 1]
+```
+</details>
+<details>
+    <summary>240.搜索二维矩阵2</summary>
+
+编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+每行中的整数从左到右按升序排列。
+
+解：同74题矩阵存在的特殊性质，每行每列都是升序，不同点存在是不同行重叠（一行的末尾可能大于下一行的头）。不能用74题解法。从每行每列升序的性质入手，关键在于从左下角或者右上角开始搜索，这样每次可以剪掉一行，或者一列
+```python
+class Solution:
+    def searchMatrix(self, matrix, target):
+        if not matrix or not matrix[0]:
+            return False
+        n=len(matrix[0])
+        row = len(matrix)-1  # 从左下角，既最后一行第一个数开始
+        col = 0
+        while (row >= 0 and col < n):
+            if matrix[row][col] > target:  # 该行中余下所有数均大于target，不再搜索此行
+                row-=1
+            elif matrix[row][col] < target:  # 该列中余下均小于target，不再搜此列
+                col+=1
+            else:
+                return True
+        return False
+```
+</details>
+
+<details>
+    <summary>75.颜色分类</summary>
+
+给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+
+此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+
+解：数组中只有3个数，将他们原地排序。
+方法一，交换排序，遇到0往前扔，遇到2往后扔
+```python
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n= len(nums)-1
+        i=0  # 计数1和0
+        j=0  # 记数0
+        while i<=n:
+            if nums[i]==0:
+                nums[i],nums[j]=nums[j],nums[i]
+                i+=1
+                j+=1
+            elif nums[i]==1:
+                i+=1
+            else:
+                nums[i],nums[n]=nums[n],nums[i]
+                n-=1                
+```
+方法二，类似法一，先直接用2覆盖，再分别对1和0计数更新
+```python
+class Solution:
+    def sortColors(self, nums):
+        i = j = 0
+        for k in range(len(nums)):
+            v = nums[k]
+            nums[k] = 2
+            if v < 2:
+                nums[j] = 1
+                j += 1
+            if v == 0:
+                nums[i] = 0
+                i += 1                        
+```
+</details>
+<details>
+    <summary>77.组合</summary>
+
+给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+
+解：回溯，递归，循环，多解法
+```python
+class Solution:
+    def combine_01(self, n: int, k: int) -> List[List[int]]:
+        if k==0:
+            return []
+        if k==n:return [list(range(1,n+1))]
+        res,tmp = [],[]
+        def backtrack(begin):#递归参数表示数组中遍历数的起点
+            if len(tmp)==k:
+                res.append(tmp[:])
+                return 
+            #把n剪枝到: n-(k-len(tmp))+1,起点为它之后的数不用再遍历
+            #当前已经收集了len(tmp)个数，还需收集k-len(tmp)个数
+            #又搜索起点的上界 + 还需收集元素的个数-1 = n
+            for i in range(begin,n-(k-len(tmp))+2):
+                tmp.append(i)
+                backtrack(i+1)#组合数里不允许重复
+                tmp.pop()
+        backtrack(1)
+        return res
+
+    #二分深搜
+    def combine_02(self,n,k):
+        res,tmp = [],[]
+        #nums = list(range(1,n+1))
+        def backtrack(idx):#idx表示当前可供选择的第idx个数
+            if len(tmp)==k:
+                res.append(tmp[:])
+                return
+            #if idx>n:return#应该剪枝
+            if idx-1 + k- len(tmp) > n:return#idx先减去1,可以避免下面先append一个数后，tmp数量加1了再判断剪枝条件
+            tmp.append(idx)
+            backtrack(idx+1)#选择当前数并递归遍历下一个
+            tmp.pop()
+            backtrack(idx+1)#不选择当前数并递归遍历下一个
+        backtrack(1)
+        return res
+
+    #组合数公式：Cn,k = Cn-1,k-1 + Cn-1,k
+    def combine_03(self,n,k):
+        if n == 0:return []
+        if k==0:return[[]]
+        if n==k:return [[i for i in range(1,n+1)]]
+        res1 = self.combine(n-1,k)
+        res2 = self.combine(n-1,k-1)
+        for res in res2:
+            res.append(n)
+        return res1+res2
+
+    #妙不可言
+    def combine(self,n,k):
+        a = []
+        b = [0]*k
+        i = 0
+        while i>=0:
+            b[i] += 1
+            if b[i]>n:i -= 1
+            elif i==k-1: a.append(b[:])
+            else:
+                i += 1
+                b[i] = b[i-1]
+        return a
+
+    def combine(self, n, k):
+        return list(itertools.combinations(range(1,n+1),k))
+```
+</details>
+<details>
+    <summary>78.子集，90子集2</summary>
+
+78给定一个无重复元素的整数数组 nums，返回该数组所有可能的子集。
+90给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集。
+
+78解：与求组合，全排列类似，求子集就是所有可能的组合。递归回溯，迭代都可。90题有重复的情况下需要先排序，剪掉相同元素
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res, n = [], len(nums)
+        def backtrack(i, tmp):
+            res.append(tmp[:])  # 此处一定要用tmp[:], 否则如果对path更改的时候，res里面的结果在变换，导致结果不对。其原因是因为object也就是list的是以引用的方式加入到res的，因此对应相同的内存地址。这就导致了privacy leak的存在
+            for k in range(i,n):
+                tmp.append(nums[k])
+                backtrack(k+1,tmp)
+                tmp.pop()
+        backtrack(0, [])
+        return res
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res=[[]]
+        for i in nums:
+             res = res + [[i] + num for num in res]
+        return res
+```
+90解：先排序，剪掉相同元素.迭代和递归
+```python
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        pre=nums[0]-1
+        l=[]
+        res=[[]]
+        for n in nums:
+            if n>pre:
+                l=[[n]+x for x in res]
+            else:
+                l=[[n]+x for x in l]
+            res+=l
+            pre=n
+        return res
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        nums.sort()
+        def helper(idx, tmp):
+            res.append(tmp)
+            for i in range(idx, n):
+                if i > idx and nums[i] == nums[i-1]:
+                    continue
+                helper(i+1, tmp + [nums[i]])
+        helper(0, [])
+        return res
+```
+</details>
+<details>
+    <summary>79.单词搜索</summary>
+
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+解：对每一个位置使用DFS，需要标记位置在搜索路径已经访问过，先置为#，递归退出后修改#为之前的数。最坏的上届，复杂度MN * 3<sup>L<sup>
+
+```python
+class Solution:
+    def exist(self, board, word):
+        if not board:
+            return False
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if self.dfs(board, i, j, word):
+                    return True
+        return False
+
+    # check whether can find word, start at (i,j) position    
+    def dfs(self, board, i, j, word):
+        if len(word) == 0: # all the characters are checked
+            return True
+        if i<0 or i>=len(board) or j<0 or j>=len(board[0]) or word[0]!=board[i][j]:
+            return False
+        tmp = board[i][j]  # first character is found, check the remaining part
+        board[i][j] = "#"  # avoid visit agian 
+        # check whether can find "word" along one direction
+        res = self.dfs(board, i+1, j, word[1:]) or self.dfs(board, i-1, j, word[1:]) \
+        or self.dfs(board, i, j+1, word[1:]) or self.dfs(board, i, j-1, word[1:])
+        board[i][j] = tmp
+        return res
+```
+</details>
+<details>
+    <summary>83.84删除排序链表中的重复元素1和2</summary>
+
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+
+解：83题是26题的链表版本。
+```python
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        cur = head
+        if head: 
+            while head.next :
+                if head.val == head.next.val :
+                    head.next = head.next.next
+                else :
+                    head = head.next
+        
+        return cur           
+```
+84，重复过的数都得删除，相当于发现重复，得把重复得一段删了
+
+```JavaScript
+var deleteDuplicates = function(head) {
+    if (head==null || head.next==null){
+        return head
+    }
+    p=head.next;
+    if(p.val==head.val) {
+        while(p!=null && p.val==head.val){
+            p=p.next
+        } 
+        return deleteDuplicates(p);
+    }
+    else{
+        head.next = deleteDuplicates(p);
+        return head
+    }
+};              
+```
+</details>
+<details>
+    <summary>85.分割链表</summary>
+
+给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
+
+解：无
+```python
+class Solution:
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        h1 = l1 = ListNode(0)
+        h2 = l2 = ListNode(0)
+        while head:
+            if head.val < x:
+                l1.next = head
+                l1 = l1.next
+            else:
+                l2.next = head
+                l2 = l2.next
+            head = head.next
+        l2.next = None    # 关键点，把后面置为空，否则出现循环了
+        l1.next = h2.next
+        return h1.next                
+```
+</details>
+<details>
+    <summary>86.合并2个有序数组</summary>
+
+输入：
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+输出：[1,2,2,3,5,6]
+
+解：数组1中以及有M+n个元素了，后面是0。从前往后放是涉及到插入后移动后面得。从后往前放最方便。如果结束后nums2中还有数字，则直接放入nums1中。；
+```JavaScript
+var merge = function(nums1, m, nums2, n) {
+    var p = m-- + n-- -1;// n指向数组中最右边，p初始化为nums1数组最后边
+    while (m>=0 && n>=0){
+        nums1[p--]=nums1[m]>nums2[n]?nums1[m--]:nums2[n--];
+    }
+    while (n>=0){
+        nums1[p--]=nums2[n--];
+    }
+}            
+```
+</details>
+
+<details>
+    <summary>89.格雷编码</summary>
+
+格雷编码是一个二进制数字系统，在该系统中，两个连续的数值仅有一个位数的差异。
+给定一个代表编码总位数的非负整数 n，打印其格雷编码序列。即使有多个不同答案，你也只需要返回其中一种。
+
+解：法一，每次逆向迭代，在首位加上1
+```python
+class Solution:
+    def grayCode(self, n: int) -> List[int]:
+        res=[0]
+        for i in range(n):
+            offset = 1 << i
+            res+=[offset+x for x in res[::-1]]
+        return res          
+```
+法二,递归,找到规律,每次改变全局x得一个位置
+
+```JavaScript
+var grayCode = function(n) {
+    var x = 0;
+    var res=[];
+    core(n, x);
+    return res;
+    
+    function core(n){
+        res.push(x);
+        for(let i=1; i<=n; i++){
+            x^=(1<<(i-1));
+            core(i-1, x);
+        }
+    }
+};
+//法三,神奇的数字二进制
+var grayCode = function(n) {
+    var ans = new Array();
+    for(let i=0;i<(1<<n);i++){
+        ans.push(i^(i>>1));
+        }
+    return ans;     
+};
+```
+</details>
+<details>
+    <summary>91.解码的方法</summary>
+
+一条包含字母 A-Z 的消息通过以下方式进行了编码：
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+给定一个只包含数字的非空字符串，请计算解码方法的总数。
+题目数据保证答案肯定是一个 32 位的整数。
+解:此题需注意不能出现先导0字符,0字符只能在1和2字符后面才行,否则无法解码直接返回0.
+除此外,本题可理解为跳跃游戏,带条件的选择跳一格还是2格.
+
+```python
+class Solution:  # 循环的方法,不是很好理解
+    def numDecodings(self, s: str) -> int:
+        v, w, p = 0, int(s>''), ''
+        for d in s:
+            v, w, p = w, (d>'0')*w + (9<int(p+d)<27)*v, d  # 这里用乘法省略了判断.
+        return w
+```
+
+```JavaScript
+var numDecodings = function(s) {
+    // 边界处理：多填充一位辅助位1
+    const len = s.length, dp = [1, ...new Array(len ).fill(0)]
+    // DP
+    pre = ''
+    for (let i = 1; i <= len; i++) {
+        let lastOne = s.slice(i - 1, i), lastTwo = pre+lastOne
+
+        if(lastOne > 0) dp[i] += dp[i - 1]
+
+        if(lastTwo >= 10 && lastTwo <= 26) dp[i] += dp[i - 2]
+
+        if(dp[i]==0) return 0
+        pre=lastOne
+    }
+    return dp[len]
+};
+```
+</details>
+<details>
+    <summary>206.反转链表1,92反转链表2</summary>
+206反转一个单链表
+
+解：将后面的指向前面,迭代或递归
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if  not head:return None
+        cur = head.next
+        head.next=None
+        while cur:
+            p=cur
+            cur=cur.next
+            p.next=head
+            head=p
+        return head       
+```
+
+```javascript
+var reverseList = function(head) {
+    if(head==null) return null;
+    if(head.next==null) return head;
+    p=reverseList(head.next);
+    head.next.next = head; //将后一个点指向自己
+    head.next=null;
+    return p;
+};
+```
+92题:反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+解:设置头结点,从m前一个开始头插法
+
+```python
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        if m==n:
+            return head
+        count = 1
+        start = ListNode(0)
+        start.next=head
+        p=start  # p为m位置的前一个
+        while count<m:
+            head=head.next
+            p=p.next
+            count+=1
+        while count<n:
+            temp=head.next
+            q=p.next
+            head.next=temp.next
+            p.next=temp
+            temp.next=q
+            count+=1
+        return start.next
+```
+</details>
+<details>
+    <summary>89.复原ip地址</summary>
+
+给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+
+有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+
+解：DFS搜索,在0先导且位数超过2位时剪枝
+```python
+class Solution:
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        res = []
+        self.dfs(s, 0, "", res)
+        return res
+    
+    def dfs(self, s, index, path, res):
+        if index == 4:
+            if not s:
+                res.append(path[:-1])
+            return # backtracking
+        for i in range(1, 4):
+            if i <= len(s):
+                if int(s[:i]) <= 255:
+                    self.dfs(s[i:], index+1, path+s[:i]+".", res)
+                if s[0] == "0":  # 剪枝
+                    break
+```
+</details>
+<details>
+    <summary>96.不同的二叉搜索树</summary>
+
+给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+
+解：动态规划。dp(n): 长度为 n 的序列能构成的不同二叉搜索树的个数。
+
+F(i,n): 以 i 为根、序列长度为 n 的不同二叉搜索树个数(1 ≤ i≤ n)。
+$$
+F(i,n) = G(i-1)*G(n-i)
+$$
+
+$$
+G(n)= ∑F(i,n) 
+=
+∑
+​	
+ G(i−1)⋅G(n−i)
+$$
+
+
+```JavaScript
+var numTrees = function(n) {
+    const G = new Array(n + 1).fill(0);
+    G[0] = 1;
+    G[1] = 1;
+
+    for (let i = 2; i <= n; ++i) {
+        for (let j = 1; j <= i; ++j) {
+            G[i] += G[j - 1] * G[i - j];
+        }
+    }
+    return G[n];
+};
+```
+</details>
+<details>
+    <summary>95.不同的二叉搜索树2</summary>
+
+给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 
+解：与96题同思路，递归 
+```JavaScript
+var generateTrees = function (n) {
+  function buildTree(start,end) {
+    if (start>end) return [null];
+    let result = []
+    for (let i = start; i <= end; i++) {
+      let left = buildTree(start, i - 1)
+      let right = buildTree(i + 1, end)
+      for (const leftNode of left) {
+        for (const rightNode of right) {
+          let node = new TreeNode(i);
+          node.left = leftNode;
+          node.right = rightNode;
+          result.push(node);
+        }
+      }
+    }
+    return result；
+  }
+  if (n === 0) return []；
+  return buildTree(1, n)；
+}
+```
+</details>
+<details>
+    <summary>98.验证二叉搜索树</summary>
+
+给定一个树，判断是否是二叉搜索树。
+解：方法1递归。判断当前结点与父结点的关系。方法2中序遍历。
+
+```python
+class Solution:
+    def isValidBST(self, root):
+        return self.check_bst(root, float("-inf"), float("inf"))
+    def check_bst(self, node, left, right):
+        if not node:
+            return True  
+        if not left < node.val < right:
+            return False
+
+        return self.check_bst(node.left, left, node.val) and self.check_bst(node.right, node.val, right)
+```
+</details>
+<details>
+    <summary>100.相同的树</summary>
+
+给定2个树，判断是否相同。
+解：递归。
+
+```python
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if p == None and q == None:
+            return True
+        if p == None or q == None:
+            return False
+        return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+```
+</details>
