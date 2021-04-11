@@ -48,3 +48,7 @@
 - 百分比布局
 - 图片的适配（图片的响应式）
 - 结合flex，grid，BFC，栅格系统等已经成型的方案
+# es6中类的继承
+class B extends A {};
+B.__proto__ ===A;
+B.prototype.__proto__ === A.prototype;

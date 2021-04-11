@@ -25,3 +25,208 @@ for (let token of tokens){
 };
 ```
 </details>
+<details>
+    <summary>151.翻转字符串中的单词</summary>
+
+输入字符串中可以有多个空格
+
+```javascript
+return s.trim().split(/\s+/).reverse().join(' ');
+//方案一，去掉两头的空格，再按多个空格分割
+//方法二，双指针遍历比较合理
+var reverseWords = function(s) {
+    let r = s.length-1;
+    let l;
+    let res='';
+    while (r>=0){
+        while(s[r]===' ') r--;
+        l=r;
+        if(r<0) break;
+        while((l>=0) && (s[l]!==' ')) l--;
+        res+=s.slice(l+1,r+1)+' ';
+        r=l;
+    }
+    return res.slice(0,res.length-1)
+};
+```
+</details>
+<details>
+    <summary>152.乘积最大子数组</summary>
+
+方法1，记录最大正乘积和最大负乘积
+```javascript
+var maxProduct = function(nums) {
+    let ma = 1,mi=1;
+    let res=-10000;
+    nums.forEach(function(v,k){
+        if(v<0){//关键，交换
+            let temp=ma;
+            ma=mi;
+            mi=temp;
+        }
+        ma=Math.max(v*ma,v);
+        mi=Math.min(v,v*mi);
+        res=Math.max(ma,res);
+    })
+    return res
+};
+//方法二，正向最大乘积和负向最大乘积，取大着
+var maxProduct = function(nums) {
+    let B= nums.slice(0);
+    nums.reverse();
+    for (let i =1; i<nums.length;i++){
+        nums[i] *= nums[i - 1] || 1
+        B[i] *= B[i - 1] || 1
+    }  
+    return Math.max(Math.max.apply(null,nums),Math.max.apply(null,B)) 
+};
+```
+</details>
+<details>
+    <summary>153.寻找旋转排序数组中的最小值，154，数组中可能有重复</summary>
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] 。
+```javascript
+//折半查找，比右侧大时说明最小值在mid右边，
+var findMin = function(nums) {
+    let i=0,j=nums.length-1;
+    while(i<j){
+        mid=i+j>>1
+        if(nums[mid]>nums[j]){
+            i=mid+1;   
+        }else{
+            j=mid;
+        }
+    } 
+    return nums[i]
+};
+```
+```python
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l=0
+        r=len(nums)-1
+        while l<r:
+            mid=l+r>>1
+            if nums[mid]>nums[r]:
+                l=mid+1
+            elif nums[mid]<nums[r]:
+                r=mid
+            else:
+                r-=1
+        return nums[l]
+```
+</details>
+<details>
+    <summary>160.香蕉链表</summary>
+
+方法1，续上对面的头，注意p和q相同或者同为null时结束，pq可为null，不然会无限循环
+```javascript
+var getIntersectionNode = function(headA, headB) {
+    let p = headA;
+    let q =headB;
+    while(p!==q){
+        p=p?p.next:headB;
+        q=q?q.next:headA;
+        }
+    return p;
+};
+```
+</details>
+<details>
+    <summary>162.寻找峰值</summary>
+
+方法1，可以循环，找到第一个下降的数，即可，方法二，二分查找
+```javascript
+var findPeakElement = function(nums) {
+let i=0,j=nums.length-1;
+while(i<j){
+    mid=i+j>>1;
+    if(nums[mid]>nums[mid+1]) j=mid;//关键步骤
+    else i=mid+1;
+}
+return i
+};
+```
+</details>
+
+<details>
+	<summary>164.最大间距</summary>
+	
+基数排序
+```python
+var maximumGap = function(nums) {
+    const n = nums.length;
+    if (n < 2) {
+        return 0;
+    }
+    let exp = 1;
+    const buf = new Array(n).fill(0);
+    const maxVal = Math.max(...nums);
+
+    while (maxVal >= exp) {
+        const cnt = new Array(10).fill(0);
+        for (let i = 0; i < n; i++) {
+            let digit = Math.floor(nums[i] / exp) % 10;
+            cnt[digit]++;
+        }
+        for (let i = 1; i < 10; i++) {
+            cnt[i] += cnt[i - 1];
+        }
+        for (let i = n - 1; i >= 0; i--) {
+            let digit = Math.floor(nums[i] / exp) % 10;
+            buf[cnt[digit] - 1] = nums[i];
+            cnt[digit]--;
+        }
+        nums.splice(0, n, ...buf);
+        exp *= 10;
+    }
+    
+    let ret = 0;
+    for (let i = 1; i < n; i++) {
+        ret = Math.max(ret, nums[i] - nums[i - 1]);
+    }
+    return ret;
+};
+
+```
+</details>
+<details>
+    <summary>165.比较版本号</summary>
+
+方法1，分割，再补齐数组元素，方法二，双指针，每次把;'.'前面的数弄出来，比较。’
+```javascript
+var compareVersion = function(version1, version2) {
+    let arr1 = version1.split('.');
+    let arr2 = version2.split('.');
+    let max = arr1.length>arr2.length?arr1.length:arr2.length;
+    let a=new Array(max-arr1.length).fill('0')
+    arr1=arr1.concat(a)
+    arr2 = arr2.concat(new Array(max-arr2.length).fill('0'));
+    for (let i=0;i<max;i++){
+        if(parseInt(arr1[i])>parseInt(arr2[i]))return 1;
+        else if (parseInt(arr1[i])<parseInt(arr2[i])) return -1;
+    }
+    return 0
+};
+```
+</details>
+<details>
+    <summary>168.Excel表列名称</summary>
+
+方法1，数字转化为字母，27-AA 
+```javascript
+var convertToTitle = function(columnNumber) {
+        list="ZABCDEFGHIJKLMNOPQRSTUVWXY"
+        result=""
+        while(columnNumber>0){
+            result=list[columnNumber%26]+result;
+            columnNumber=Math.floor((columnNumber-1)/26);
+        }  
+        return result
+};
+```
+</details>
+
+
+
