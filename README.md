@@ -162,7 +162,7 @@ class Solution:
 class Solution:
     def permute(self, nums):
         def backtrack(start, end):
-            if start == end-1:
+            if start == end:
                 ans.append(nums[:])
             for i in range(start, end):  # 每一层相当于固定start位的数，
                 nums[start], nums[i] = nums[i], nums[start]  # 让start之后的数轮流固定
@@ -450,19 +450,22 @@ var preorderTraversal = function(root) { //方法二
 题目：给定一个二叉树，返回它的中序 遍历。
 解法：迭代，左链连续入栈，弹出后访问，
 
-```python
-class Solution:
-    def inorderTraversal(self, root):
-        res, stack = [], []
-        while True:
-            while root:
-                stack.append(root)
-                root = root.left
-            if not stack:
-                return res
-            node = stack.pop()
-            res.append(node.val)
-            root = node.right
+```js
+var inorderTraversal = function (root) {
+    let nodes = [];
+    let res = [];
+    while (root || nodes.length) {
+        if (root) {
+            nodes.push(root);
+            root = root.left;
+        } else {
+            let node = nodes.pop();
+            res.push(node.val);
+            root = node.right;
+        }
+    }
+    return res
+};
 ```
 
 </details>
@@ -689,28 +692,32 @@ class Solution:
 题目：找到数组中三数之和等于0，返回三数
 解法：本题是两数之和进阶版，暴力发超时.其实这题也是双指针题，但是速度太慢。转为两数和，x2+x3 = target= -x1.需考虑特殊情况0，和重复数字。18题四数和不做了，
 
-```python
-class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        dic = defaultdict(int)   # 先用字典记录每个数字出现的次数
-        for i in nums:
-            dic[i] += 1
-        nums = sorted(dic)     # 得到一个排序后的去重数组
-        for i, x in enumerate(nums):   
-            if x == 0 and dic[x] > 2:  # 情况一：x 为0，且 x 出现了3次及3次以上
-                res.append([0, 0, 0])      
-            if x != 0 and dic[x] > 1:    # 情况二：若 x（0除外）出现了2次及2次以上，
-                if -2 * x in dic:    #  只要-2乘 x 在数组里有出现，便符合条件
-                    res.append([x, x, -2*x])
-            if x < 0:      #情况三：这里是剪枝效果，固定X<y<z,保证res里不重复
-                y_z = -x          #y+z 的和为 -x 便能符合要求
-                z_id = bisect.bisect_right(nums,y_z//2) # 求得 z最小可能的下标
-                for z in nums[z_id:]:    # 则 z 的取值范围是 nums[z_id:]
-                    y = y_z - z
-                    if y > x and y in dic:
-                        res.append([x, y, z])
-        return res
+```js
+
+var threeSum = function(nums) {
+    var ans = [];
+    nums.sort((a,b) => a-b);
+    for(let i=0; i<nums.length-2; i++){
+        if(nums[i]>0)break;
+        if(nums[i]===nums[i-1])continue // 去重
+        var L=i+1,R=nums.length-1;
+        while(L<R){
+            var sum=nums[i]+nums[L]+nums[R];
+            if(sum===0){
+                ans.push([nums[i],nums[L],nums[R]]);
+                while(L<R&&nums[L]===nums[L+1]){L++} // 去重
+                while(L<R&&nums[R]===nums[R-1]){R--} // 去重
+                L++;
+                R--;
+            }else if(sum>0){
+                R--;
+            }else{
+                L++;
+            }
+        }
+    }
+    return ans;
+};
 ```
 
 </details>
