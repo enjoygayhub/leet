@@ -1,21 +1,7 @@
 # leet code
 
-欢迎阅读
+记录一些题解
 
-## 目录
-
-1. [经典算法类](#classic)  
-   动态规划、贪心、回溯
-2. [经典数据结构](#data)  
-   链表、栈、树、图
-3. [数学](#math)  
-   位运算、找规律
-4. [特别技巧](#skill)  
-   花式技巧
-5. [其他](#other)    
-   运算符优先级:~取反>算术运算符>移位>关系>按位与>逻辑与>条件运算>赋值
-
----
 
 ## <span id ='classic'>经典算法</span>
 
@@ -130,7 +116,7 @@ class Solution:
 
 
 题目：给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。数组中无重复的数，且每个数使用次数不限。
-解法：回溯加剪枝，将数组candidates先排序，依次选择数来与target相减，更新下一层被选数组中的所有数都大于等于上一层被选的数，来达到剪枝效果。特别的，python中path参数更新，变相完成了回溯的效果。
+解法：回溯加剪枝，将数组candidates先排序，依次选择数来与target相减，更新下一层被选数组中的所有数都大于等于上一层被选的数，来达到剪枝效果。
 
 ```python
 class Solution:
@@ -473,8 +459,25 @@ var inorderTraversal = function (root) {
 <details>
 <summary>145.二叉树后序遍历</summary>
 
-
 题目：给定一个二叉树，返回它的后序 遍历。
+
+先根再右，后左，结果数组反向即可（或者直接头插法）。
+```js
+function postOrder(root) {
+  if (!root) return null;
+  let nodes = [];
+  let res = [];
+  nodes.push(root);
+  while (nodes.length) {
+    let node = nodes.pop();
+    res.unshift(node.val);
+    node.left && nodes.push(node.left);
+    node.right && nodes.push(node.right);
+  }
+  return res
+}
+```
+
 解法：迭代，需设置pre结点，
 
 ```python
@@ -502,10 +505,6 @@ class Solution:
 ```
 
 </details>
-
-### 图
-
----
 
 ## <span id ='math'>数学类</span>
 
@@ -561,11 +560,10 @@ class Solution:
 
 </details>
 
-### 规律
+### 找规律
 
 <details>
 <summary>6.Z字形变换</summary>
-
 
 题目：将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。
 解法一：找规律,字符串按索引又第一行排到第n行,再反向排到第1行,设置转向flag.
@@ -690,7 +688,7 @@ class Solution:
 
 
 题目：找到数组中三数之和等于0，返回三数
-解法：本题是两数之和进阶版，暴力发超时.其实这题也是双指针题，但是速度太慢。转为两数和，x2+x3 = target= -x1.需考虑特殊情况0，和重复数字。18题四数和不做了，
+解法：本题是两数之和进阶版，先排序方便去重，固定一个数，然后使用双指针，复杂度O(N<sup>2</sup>).
 
 ```js
 
@@ -743,7 +741,7 @@ class Solution:
         return res
 ```
 
-	解法二，使用双端队列deque，模拟滑动窗口，当遇到相同字符时，队列左侧排除元素，直到排出到该字符停，该方法非常直观，好理解，速度较解法一慢点。
+解法二，使用双端队列deque，模拟滑动窗口，当遇到相同字符时，队列左侧排除元素，直到排出到该字符停，该方法非常直观，好理解，速度较解法一慢点。
 
 ```python
 class Solution:
@@ -807,20 +805,6 @@ class Solution:
         return cmn
 ```
 
-解法2：骚操作，运用zip*。
-
-```python
-class Solution:
-    def longestCommonPrefix(self, strs: List[str]) -> str:
-        out_str = ''
-        for i in zip(*strs):
-            if len(set(i)) == 1:
-                out_str += i[0]
-            else:
-                break
-        return out_str
-```
-
 </details>
 
 <details>
@@ -831,7 +815,6 @@ class Solution:
 解法：利用质数相乘唯一性，可以将相同字母不同顺序的字符串映射到唯一的一个整数值。
 
 然后很神奇的是，将字母c的值映射为ord(c)+2,也可以通过。
-不要问为啥，我也不知道。
 而且我测试过，映射为ord(c)+3，ord(c)+4，ord(c)+1，ord(c)+0都不行，会出现乘积重复val值
 但是ord(c)+2就是可以。
 
@@ -855,16 +838,9 @@ class Solution:
 <details>
 <summary>17.电话号码的字母组合</summary>
 
-
 题目：给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
-解法：其实就是拼音9建，按数字能打出的所有字母可能性.组合问题，递归，回溯都可以。下面代码骚操作，使用itertools.product(*)
+解法：其实就是拼音9建，按数字能打出的所有字母可能性.组合问题，递归，回溯都可以。参考组合总数
 
-```python
-class Solution:
-    def letterCombinations(self, digits: str) -> List[str]:
-        b = {"2":"abc", "3":"def", "4":"ghi", "5":"jkl", "6":"mno", "7":"pqrs", "8":"tuv", "9":"wxyz"}
-        return [] if digits == "" else [ "".join(x) for x in itertools.product(*(b[d] for d in digits ))]
-```
 
 </details>
 
@@ -873,7 +849,6 @@ class Solution:
 题目：假设按照升序排序的数组在预先未知的某个点上进行了旋转。数组无重复
 ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
 搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
-
 
 解法：二分法，分四种情况。要用索引0当指标，因为数据可能一直递增。注意第一个判断里面等号不可少。
 
@@ -987,8 +962,7 @@ class Solution:
             else: 
                 end = mid
         return start 
-  # 调库函数
-return bisect.bisect_left(nums,target)
+
 ```
 
 </details>
@@ -1026,11 +1000,9 @@ class Solution:
 
 </details>
 
-## <span id ='other'>其他</span>
 
 <details>
 <summary>7.整数反转</summary>
-
 
 题目：给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
 解法：没什么好说 的.注意负数和整数越界,32 位的有符号整数其数值范围为 [−2^31,  2^31 − 1]
@@ -1053,9 +1025,9 @@ class Solution:
 <details>
 <summary>9.回文数</summary>
 题目：判断一个整数是否是回文数
-解法：方法1转化为字符串，```return str(num)==str(num)[::-1]```.  
+方法1，循环将整数的首位与末位比较
 	方法2，将整数反转，如上第7题  
-	方法3，将整数反转一半。（方法4，循环将整数的首位与末位比较）
+	方法3，将整数反转一半。
 
 
 ```python
